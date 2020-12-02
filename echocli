@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -e
+export ECHOCLI_WORKDIR=$(cd $(dirname $0) && pwd)
+# shellcheck source=common
+. "$ECHOCLI_WORKDIR/common"
+
+cli_help() {
+  cli_name=${0##*/}
+  echo "
+$cli_name
+
+Usage: $cli_name [command]
+
+Commands:
+  echo-server  Start echo server (TCP and UDP)
+  echo-test    Start echo client
+  compile      Compile the application
+  help         Help
+"
+  exit 1
+}
+
+cli_log "Exporting config ..."
+[ ! -f "$ECHOCLI_WORKDIR/config" ] \
+  && echo "ERROR: No $ECHOCLI_WORKDIR/config file found. " \
+  && exit 1
+
+export $(cat "$ECHOCLI_WORKDIR/config" | xargs)
+
+case "$1" in
+   echo-test)
+	"$ECHOCLI_WORKDIR/commands/echo-client" "$@" | tee -ia "$ECHOCLI_WORKDIR/logs/echo_client_${2}.log"
+    ;;
+   echo-server)
+    "$ECHOCLI_WORKDIR/commands/echo-server" "$@" | tee -ia "$ECHOCLI_WORKDIR/logs/echo_server_${2}.log"
+    ;;
+   compile)
+    "$ECHOCLI_WORKDIR/commands/compile" "$@" | tee -ia "$ECHOCLI_WORKDIR/logs/compile_${2}.log"
+    ;;
+   *)
+    cli_help
+    ;;
+esac
+

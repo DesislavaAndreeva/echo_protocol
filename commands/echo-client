@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+set -e
+. "$ECHOCLI_WORKDIR/common"
+
+#$1 - echo-test
+#$2 - ip
+#$3 - <ip-addr>
+#$4 - <tcp/udp>
+#$5 - echo-message
+#$6 - <message>
+#$7 - wait-time
+#$8 - <miliseconds>
+
+cli_help_echo_client() {
+  echo "
+Command: echo-test
+
+Usage: 
+  echo-test ip <A.B.C.D> <tcp|udp> echo-message <message> wait-time <time-miliseconds>"
+  exit 1
+}
+
+[ ! -n "$7" ] && cli_help_echo_client
+
+export ECHOCLI_PROJECT_NAME=$1
+
+env | grep "ECHOCLI_*" >/dev/null
+
+ip=$2
+proto=$3
+msg=$5
+timeout=$7
+
+if expr "$ip" : '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' >/dev/null; then
+  IFS=.
+  set $ip
+  for quad in 1 2 3 4; do
+    if eval [ \$$quad -gt 255 ]; then
+      echo "Wrong ip address ($ip)"
+      exit 1
+    fi
+  done
+else
+  echo "Wrong ip address ($ip)"
+  exit 1
+fi
+
+if [ "$proto" != "tcp" -a "$proto" != "udp" -a "$proto" != "TCP" -a "$proto" != "UDP" ]
+then
+  echo "Protocol must be either 'tcp'/'TCP' or 'udp'/'UDP'!"
+  exit 1
+fi
+
+case $proto in
+	tcp)
+	proto_code=6 #IPPROTO_TCP
+	;;
+	TCP)
+	proto_code=6 #IPPROTO_TCP
+	;;
+	udp)
+	proto_code=17 #IPPROTO_UDP
+	;;
+	UDP)
+	proto_code=17 #IPPROTO_UDP
+	;;
+	*)
+	echo "No matching information found"
+	;;
+esac
+
+if [ ${#msg} -gt 256 ]
+then
+  echo "You can't send a message longer than 256 characters!"
+  exit 1
+fi
+
+if [ $timeout -lt 1 ]
+then
+  echo "You can't wait less than one milisecond!"
+  exit 1
+fi
+
+if [ $timeout -gt 600000 ]
+then
+  echo "You can't wait more than ten minutes!"
+  exit 1
+fi
+
+FILE=$ECHOCLI_WORKDIR/src/echo
+if [ -f "$FILE" ]; then
+	echo "Starting echo client ... "
+	$FILE -c "$ip" $proto_code $msg $timeout
+fi
+	

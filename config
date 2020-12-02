@@ -1,0 +1,4 @@
+ECHOCLI_K8S_NAMESPACE=project-test
+ECHOCLI_PROJECTS_PATH=/opt/myproject/projects
+ECHOCLI_PROJECT_NAME=project-001
+ECHOCLI_REPO_PATH=/path/to/repo

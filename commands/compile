@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -e
+. "$ECHOCLI_WORKDIR/common"
+
+cli_help_echo_client() {
+  echo "
+Command: compile
+
+Usage: 
+  compile"
+  exit 1
+}
+
+export ECHOCLI_PROJECT_NAME=$1
+
+env | grep "ECHOCLI_*" >/dev/null
+
+FILE=$ECHOCLI_WORKDIR/makefile
+
+if [ -f "$FILE" ]; then
+	echo "Compiling echo application ... "
+	make clean -f $FILE >/dev/null
+	make -f $FILE >/dev/null
+	echo "Application successfully compiled!"
+fi
+

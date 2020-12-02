@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -e
+. "$ECHOCLI_WORKDIR/common"
+
+cli_help_echo_server() {
+  echo "
+Command: echo-server
+
+Usage: 
+  echo-server <tcp-max-connection>"
+  exit 1
+}
+
+[ ! -n "$2" ] && cli_help_echo_server
+
+export ECHOCLI_PROJECT_NAME=$1
+
+env | grep "ECHOCLI_*" >/dev/null
+
+tcp_max_connections=$2
+
+if [ $tcp_max_connections -gt 100 ]
+then
+  echo "You can't have more than 100 tcp connections on server!"
+  exit 1
+fi
+
+FILE=$ECHOCLI_WORKDIR/src/echo
+if [ -f "$FILE" ]; then
+	
+	echo "Starting echo servers... "	
+	$FILE -s $tcp_max_connections
+fi
