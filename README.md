@@ -36,7 +36,8 @@ Commands:
  
 # Compile
 
-Simple execute the compile command:
+Simply execute the compile command:
+
 ```
 ./echocli compile
 ```
@@ -53,7 +54,7 @@ sudo ./echocli echo-server <tcp-max-connections>
 ```
 
 TCP is a connection-oriented protocol, which means a connection is established and maintained until the application programs at each end have finished exchanging messages.
-When starting the echo service you can explicitly set the number of connections the tcp server can maintain. UDP is a connectionless protocol and no connection needs to be established between the source and destination before transmiting data.
+When starting the echo service you can explicitly set the number of connections the tcp server can maintain by <tcp-max-connections>. UDP is a connectionless protocol and no connection needs to be established between the source and destination before transmiting data.
 
 Example way to check if the server is listening:
 
@@ -81,4 +82,4 @@ Example:
 
 # TODO 
 
-Add more commands. For example a command to automise the server's state checking.
+Add more commands and more descriptive logs. For example a command to automise the server's state checking.
