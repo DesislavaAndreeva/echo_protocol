@@ -12,8 +12,6 @@ enabled use another port for testing this application (change ECHO_PORT_DEFAULT)
 
 # Description
 
-# Details
-
 ### The aplication provides:
 
  * Very simple command line interface (CLI) with the following commads:
@@ -38,6 +36,7 @@ Commands:
  
 # Compile
 
+Simple execute the compile command:
 ```
 ./echocli compile
 ```
@@ -53,6 +52,9 @@ If you change ECHO_PORT_DEFAULT to a number number larger than 1024 you can run 
 sudo ./echocli echo-server <tcp-max-connections>
 ```
 
+TCP is a connection-oriented protocol, which means a connection is established and maintained until the application programs at each end have finished exchanging messages.
+When starting the echo service you can explicitly set the number of connections the tcp server can maintain. UDP is a connectionless protocol and no connection needs to be established between the source and destination before transmiting data.
+
 Example way to check if the server is listening:
 
 ```
@@ -64,10 +66,19 @@ echo    143943 root    4u  IPv4 2277710205      0t0  UDP *:echo
 ```
 
  ## Client
+ 
 ```
 ./echocli echo-test ip <A.B.C.D> <tcp|udp> echo-message <message> wait-time <time-miliseconds>"
 ```
 
+Example:
+
+```
+[desia@localhost echo_protocol]$ ./echocli echo-test 10.3.73.23 tcp echo-message "Hello, echo tcp server!" wait-time 100
+== echocli 2020-12-02T16:40:40Z Exporting config ...
+ Message 'Hello, echo tcp server!' was received for 0.38500000000000001ms
+```
+
 # TODO 
 
-Add more commands. Example: command to automise the server's state checking.
+Add more commands. For example a command to automise the server's state checking.
