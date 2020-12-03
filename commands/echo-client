@@ -89,7 +89,7 @@ fi
 
 FILE=$ECHOCLI_WORKDIR/src/echo
 if [ -f "$FILE" ]; then
-	echo "Starting echo client ... "
+	#echo "Starting echo client ... "
 	$FILE -c "$ip" $proto_code $msg $timeout
 fi
 	

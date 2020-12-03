@@ -1,0 +1,1 @@
+This directory is needed to keep log files with commands execution info.

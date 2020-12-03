@@ -23,7 +23,9 @@
 
 #define log_echo(format, argum...) ({fprintf(stderr," "format"\r\n",##argum);})
 
-#define ECHO_PORT_DEFAULT 2024 /*Normally, default echo port is 7, but it was busy on my machine, so I changed it with available one*/
+/*Default echo port is 7, if you use it execute the program as priviledged user;
+  You can execute as unpriviledged user for numbers higher that 1024*/
+#define ECHO_PORT_DEFAULT 7 
 #define ECHO_TCP_BACKLOG 100
 #define ECHO_BUFSIZE 1024
 #define ECHO_MAX_MSG_SIZE 260 /*Extra 4 bytes just in case*/
